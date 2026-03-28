@@ -1,0 +1,18 @@
+<section class="section-header">
+  <div>
+    <h1 data-i18n="search.title">Search</h1>
+    <p data-i18n="search.description">Search across titles and post content, entirely in your browser.</p>
+  </div>
+</section>
+
+<section class="search-panel">
+  <label class="search-label" for="search-input" data-i18n="search.label">Search posts</label>
+  <input id="search-input" class="search-input" type="search" placeholder="Try “writing”, “Paris”, or “tools”" data-placeholder-en="Try “writing”, “Paris”, or “tools”" data-placeholder-zh="试试搜索“写作”、“巴黎”或“工具”" autocomplete="off">
+  <p class="search-hint" data-i18n="search.hint">The index is generated at build time. No backend required.</p>
+</section>
+
+<section id="search-results" class="search-results" data-search-url="<%= url_for('/search.json') %>">
+  <p class="search-empty" data-i18n="search.start">Start typing to search your posts.</p>
+</section>
+
+<%- js('js/search.js') %>

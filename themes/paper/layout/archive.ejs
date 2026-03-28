@@ -1,0 +1,80 @@
+<section class="section-header">
+  <div>
+    <h1 data-i18n="archive.title">Archive</h1>
+    <p data-i18n="archive.description">Browse posts by year and month.</p>
+  </div>
+</section>
+
+<% if (!page.year && !page.month) { %>
+  <% let activeYear = ''; %>
+  <% let activeMonth = ''; %>
+  <% site.posts.sort('date', -1).each(function(post) { %>
+    <% const year = date(post.date, 'YYYY'); %>
+    <% const month = date(post.date, 'MMMM'); %>
+    <% const monthNumber = date(post.date, 'MM'); %>
+    <% if (year !== activeYear) { %>
+      <% if (activeMonth) { %>
+            </ul>
+          </section>
+        </div>
+      </section>
+      <% } %>
+      <section class="archive-year-block">
+        <h2 class="archive-year-heading">
+          <a href="<%= url_for('/archives/' + year + '/') %>"><%= year %></a>
+        </h2>
+        <div class="archive-year-months" data-language-list>
+      <% activeYear = year; %>
+      <% activeMonth = ''; %>
+    <% } %>
+    <% if (month !== activeMonth) { %>
+      <% if (activeMonth) { %>
+            </ul>
+          </section>
+      <% } %>
+      <section class="archive-month-block">
+        <h3 class="archive-month-heading">
+          <a href="<%= url_for('/archives/' + year + '/' + monthNumber + '/') %>"><%= month %></a>
+        </h3>
+        <ul class="archive-posts">
+      <% activeMonth = month; %>
+    <% } %>
+    <li class="archive-post" data-post-lang="<%= postLang(post) %>">
+      <a class="archive-post-link" href="<%= url_for(post.path) %>"><%= post.title %></a>
+      <div class="archive-post-meta">
+        <span class="language-chip compact"><%= langLabel(postLang(post)) %></span>
+        <time class="archive-post-date" datetime="<%= full_date(post.date, 'YYYY-MM-DD') %>"><%= date(post.date, 'MMM D') %></time>
+      </div>
+    </li>
+  <% }) %>
+  <% if (site.posts.length) { %>
+        </ul>
+      </section>
+    </div>
+  </section>
+  <% } else { %>
+    <p class="empty-state" data-i18n="archive.empty">No posts yet.</p>
+  <% } %>
+<% } else { %>
+  <section class="archive-filter">
+    <p class="archive-filter-label">
+      <% if (page.year && page.month) { %>
+        <%= date(page.posts.data[0] ? page.posts.data[0].date : page.date, 'MMMM YYYY') %>
+      <% } else { %>
+        <%= page.year %>
+      <% } %>
+    </p>
+    <ul class="archive-posts" data-language-list>
+      <% page.posts.sort('date', -1).each(function(post) { %>
+        <li class="archive-post" data-post-lang="<%= postLang(post) %>">
+          <a class="archive-post-link" href="<%= url_for(post.path) %>"><%= post.title %></a>
+          <div class="archive-post-meta">
+            <span class="language-chip compact"><%= langLabel(postLang(post)) %></span>
+            <time class="archive-post-date" datetime="<%= full_date(post.date, 'YYYY-MM-DD') %>"><%= date(post.date, 'MMM D, YYYY') %></time>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  </section>
+  <p class="empty-state language-empty-state" data-language-empty hidden data-i18n="filter.empty">No posts available in this language yet.</p>
+<% } %>

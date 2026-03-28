@@ -1,0 +1,28 @@
+{
+  "name": "lizeng614.github.io",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A minimal personal blog built with Hexo for GitHub Pages.",
+  "hexo": {
+    "version": "8.1.1"
+  },
+  "scripts": {
+    "clean": "hexo clean",
+    "build": "hexo generate",
+    "build:preview": "hexo generate --config _config.yml,_config.preview.yml",
+    "dev": "hexo server",
+    "dev:preview": "hexo server --config _config.yml,_config.preview.yml",
+    "new": "hexo new post",
+    "check": "hexo generate"
+  },
+  "dependencies": {
+    "hexo": "8.1.1",
+    "hexo-cli": "4.3.2",
+    "hexo-generator-archive": "2.0.0",
+    "hexo-generator-feed": "4.0.0",
+    "hexo-generator-index": "4.0.0",
+    "hexo-renderer-ejs": "2.0.0",
+    "hexo-renderer-marked": "7.0.1",
+    "hexo-server": "3.0.0"
+  }
+}

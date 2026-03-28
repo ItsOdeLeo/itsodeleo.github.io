@@ -1,0 +1,17 @@
+<%
+const plainText = strip_html(post.excerpt || post.content).replace(/\s+/g, ' ').trim();
+const preview = plainText.length > 220 ? plainText.slice(0, 220) + '…' : plainText;
+const language = postLang(post);
+%>
+<article class="post-item" data-post-lang="<%= language %>">
+  <header class="post-item-header">
+    <h3 class="post-item-title">
+      <a href="<%= url_for(post.path) %>"><%= post.title %></a>
+    </h3>
+    <p class="post-meta">
+      <span class="language-chip compact"><%= langLabel(language) %></span>
+      <time datetime="<%= full_date(post.date, 'YYYY-MM-DD') %>"><%= date(post.date, 'MMMM D, YYYY') %></time>
+    </p>
+  </header>
+  <p class="post-item-excerpt"><%= preview %></p>
+</article>

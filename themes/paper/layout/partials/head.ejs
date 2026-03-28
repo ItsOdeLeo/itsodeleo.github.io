@@ -1,0 +1,14 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><% if (page.title) { %><%= page.title %> · <% } %><%= config.title %></title>
+<meta name="description" content="<%= page.description || config.description %>">
+<meta property="og:title" content="<% if (page.title) { %><%= page.title %> · <% } %><%= config.title %>">
+<meta property="og:description" content="<%= page.description || config.description %>">
+<meta property="og:type" content="<%= is_post() ? 'article' : 'website' %>">
+<meta property="og:url" content="<%= config.url + url_for(page.path || '/') %>">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#fcfbf8">
+<link rel="icon" href="data:,">
+<link rel="alternate" type="application/atom+xml" title="<%= config.title %> Atom Feed" href="<%= url_for('/atom.xml') %>">
+<link rel="alternate" type="application/rss+xml" title="<%= config.title %> RSS Feed" href="<%= url_for('/rss2.xml') %>">
+<%- css('css/style.css') %>

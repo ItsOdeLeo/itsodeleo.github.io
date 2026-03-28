@@ -1,0 +1,95 @@
+title: Li Zeng
+subtitle:
+description: A calm, text-first personal blog built with Hexo.
+keywords:
+  - personal blog
+  - writing
+  - notes
+author: Li Zeng
+language: en
+timezone: Europe/Paris
+
+url: https://lizeng614.github.io
+root: /
+permalink: posts/:slug/
+permalink_defaults:
+
+pretty_urls:
+  trailing_index: false
+  trailing_html: false
+
+theme: paper
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+code_dir: downloads/code
+i18n_dir: :lang
+new_post_name: :slug.md
+default_layout: post
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: false
+
+index_generator:
+  path: ''
+  per_page: 6
+  order_by: -date
+
+archive_generator:
+  enabled: true
+  per_page: 24
+  yearly: true
+  monthly: true
+  daily: false
+  order_by: -date
+
+highlight:
+  enable: false
+
+prismjs:
+  enable: false
+
+marked:
+  prependRoot: false
+  postAsset: false
+  lazyload: false
+  anchors:
+    level: 2
+    collisionSuffix: ''
+
+bio:
+
+languages:
+  default: en
+  options:
+    - en
+    - zh
+
+feed:
+  enable: false
+  type:
+    - atom
+    - rss2
+  path:
+    - atom.xml
+    - rss2.xml
+  limit: 20
+  hub:
+  content: true
+  content_limit: 2000
+  content_limit_delim: ' '
+  order_by: -date
+  icon:
+  autodiscovery: true
+  template:
+  canonical_lang: en
+
+social:

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="<%= page.lang || config.language || 'en' %>">
+  <head>
+    <%- partial('partials/head') %>
+  </head>
+  <body data-default-language="<%= (config.languages && config.languages.default) || 'en' %>">
+    <div class="site-shell">
+      <%- partial('partials/header') %>
+      <main class="site-main">
+        <%- body %>
+      </main>
+      <%- partial('partials/footer') %>
+    </div>
+    <%- js('js/language-switcher.js') %>
+  </body>
+</html>

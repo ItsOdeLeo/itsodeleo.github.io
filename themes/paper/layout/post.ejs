@@ -1,0 +1,27 @@
+<% const postLanguage = postLang(page); %>
+<% const translation = translatedPost(page); %>
+<article class="post-detail">
+  <header class="post-detail-header">
+    <h1 class="page-title"><%= page.title %></h1>
+    <p class="post-meta">
+      <time datetime="<%= full_date(page.date, 'YYYY-MM-DD') %>"><%= date(page.date, 'MMMM D, YYYY') %></time>
+    </p>
+    <div class="post-language-row">
+      <span class="language-chip"><%= langLabel(postLanguage) %></span>
+      <% if (translation) { %>
+        <a class="translation-link" href="<%= url_for(translation.path) %>">
+          <span data-i18n="post.translation">Read this post in</span> <%= langLabel(postLang(translation)) %>
+        </a>
+      <% } %>
+    </div>
+  </header>
+
+  <div class="post-content">
+    <%- page.content %>
+  </div>
+
+  <footer class="post-detail-footer">
+    <a href="<%= url_for('/blog/') %>" data-i18n="post.allPosts">All posts</a>
+    <a href="<%= url_for('/archives/') %>" data-i18n="post.archive">Archive</a>
+  </footer>
+</article>

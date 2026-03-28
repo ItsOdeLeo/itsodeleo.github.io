@@ -1,0 +1,10 @@
+<section class="post-list" data-language-list>
+  <% if (site.posts.length) { %>
+    <% site.posts.sort('date', -1).limit(5).each(function(post) { %>
+      <%- partial('partials/post-item', { post: post }) %>
+    <% }) %>
+  <% } else { %>
+    <p class="empty-state" data-i18n="home.empty">No posts yet. Add a Markdown file in source/_posts to get started.</p>
+  <% } %>
+</section>
+<p class="empty-state language-empty-state" data-language-empty hidden data-i18n="filter.empty">No posts available in this language yet.</p>
