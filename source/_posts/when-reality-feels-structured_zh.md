@@ -7,7 +7,7 @@ lang: zh
 translation_key: nested-simulation-and-nested-intelligence
 ---
 
-这不是一个证明。不是一个理论，它只是一个我反复出现的想法，一种我无法完全解释、却无法忽视的感觉。
+这不是一个证明，不是一个理论，它只是一个我反复出现的想法，一种我无法完全解释、却无法忽视的感觉。
 
 ## 身处模拟中的感觉
 
