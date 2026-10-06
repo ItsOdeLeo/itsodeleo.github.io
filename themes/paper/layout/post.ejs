@@ -1,8 +1,14 @@
 <% const postLanguage = postLang(page); %>
 <% const translation = translatedPost(page); %>
+<% const summary = page.description ? strip_html(String(page.description)).replace(/\s+/g, ' ').trim() : ''; %>
+<% const articleToc = page.toc === false ? '' : toc(page.content, { min_depth: 2, max_depth: 3, list_number: false }); %>
+<% const showToc = (articleToc.match(/<li class="toc-item toc-level-[23]">/g) || []).length >= 3; %>
 <article class="post-detail">
   <header class="post-detail-header">
     <h1 class="page-title"><%= page.title %></h1>
+    <% if (summary) { %>
+    <p class="post-summary"><%= summary %></p>
+    <% } %>
     <p class="post-meta">
       <a rel="author" href="<%= url_for(postLanguage === 'zh' ? '/about/zh/' : '/about/') %>"><%= config.author %></a>
       <time datetime="<%= full_date(page.date, 'YYYY-MM-DD') %>"><%= localizedDate(page.date) %></time>
@@ -19,6 +25,13 @@
       <% } %>
     </div>
   </header>
+
+  <% if (showToc) { %>
+  <nav class="post-toc" aria-labelledby="post-toc-title">
+    <p class="post-toc-title" id="post-toc-title"><%= postLanguage === 'zh' ? '本文目录' : 'On this page' %></p>
+    <%- articleToc %>
+  </nav>
+  <% } %>
 
   <div class="post-content">
     <%- page.content %>

@@ -319,6 +319,45 @@ button {
   margin-bottom: 2rem;
 }
 
+.post-summary {
+  margin: 1rem 0;
+  font-size: 1.12rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.post-toc {
+  margin-bottom: 2rem;
+  padding: 0.8rem 1rem;
+  border-left: 2px solid var(--border);
+  font-family: var(--ui-font);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.post-toc-title {
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+}
+
+.post-toc .toc,
+.post-toc .toc-child {
+  display: grid;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.post-toc .toc-child {
+  margin-top: 0.25rem;
+  padding-left: 1rem;
+}
+
+.post-toc a {
+  overflow-wrap: anywhere;
+}
+
 .post-content {
   font-size: 1.08rem;
 }

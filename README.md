@@ -276,3 +276,15 @@ Use Search Console to check indexed URLs, Google-selected canonicals, search que
 This blog currently has one original essay in two languages. Improving search reach from here requires useful original writing for the intended audience, accurate descriptive summaries, and relevant links between related essays when those essays exist. Do not add empty topic pages, fabricated expertise, unsupported schema, or repetitive keyword text merely to increase an SEO score.
 
 Implementation references: [Google multilingual site guidance](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites), [Article structured data](https://developers.google.com/search/docs/appearance/structured-data/article), [Profile pages](https://developers.google.com/search/docs/appearance/structured-data/profile-page), and [favicons](https://developers.google.com/search/docs/appearance/favicon-in-search).
+
+### AI search discovery (GEO)
+
+The same public HTML serves readers and crawlers. Article pages display their authored `description` as a short introduction, with no generated factual claims. Articles with at least three H2/H3 sections also display a static, localized table of contents linking to the existing heading IDs. Set `toc: false` in front matter to omit it. Summaries and section links improve readability and navigation; they are not a guarantee of AI citations.
+
+The existing wildcard `Allow: /` rule permits search crawlers including Googlebot, Bingbot, and OAI-SearchBot. No special crawler groups are needed to repeat that permission. Search discovery and model training are separate controls: OpenAI documents OAI-SearchBot for search and GPTBot for potential training. This implementation does not change the existing training-crawler policy.
+
+In Search Console, check **Settings → Search generative AI** for the effective inclusion control. Inclusion is only eligibility; indexed pages and snippets are still required. Use Google's Generative AI performance report when sufficient data makes it available. Bing Webmaster Tools and its AI Performance report are a separate setup; the empty Bing verification field does not mean that setup has been completed.
+
+Next work should prioritize original essays, clear reasoning, authentic sources when a claim depends on outside evidence, and relevant links between essays. Preserve the distinction between personal speculation and established findings. Do not add invented citations, FAQ content, or claims of expertise. Google does not require an `llms.txt` file or special AI schema.
+
+References: [Google AI search guidance](https://developers.google.com/search/docs/appearance/ai-features), [Google's AI inclusion control](https://support.google.com/webmasters/answer/16908024), [Google's AI performance report](https://support.google.com/webmasters/answer/16984139), and [OpenAI crawler roles](https://developers.openai.com/api/docs/bots).
