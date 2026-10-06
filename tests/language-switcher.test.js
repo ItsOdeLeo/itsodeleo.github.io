@@ -9,6 +9,7 @@ const moment = require("moment-timezone");
 const { JSDOM } = require("jsdom");
 const Warehouse = require("warehouse").default;
 const localization = require("../lib/localization");
+const { feedDetails } = require("../lib/feeds");
 const paginator = require("hexo/dist/plugins/helper/paginator");
 
 const root = path.resolve(__dirname, "..");
@@ -131,6 +132,7 @@ test("missing article translations are disabled without inventing a destination"
     page: { lang: "en", content_language: "en", path: "posts/solo/" }, config,
     seoTranslations: () => [],
     seoMetadata: () => ({ canonical: new URL(locals.page.path, origin + '/').href }),
+    feedDetails: () => feedDetails(locals.config, locals.page.content_language || locals.page.lang),
     url_for: value => value.startsWith("/") ? value : "/" + value,
     localText: key => localization.text(key, "en"), localizedPath: section => localization.localizedPath(section, "en", config)
   };

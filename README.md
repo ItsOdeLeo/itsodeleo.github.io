@@ -11,7 +11,7 @@ A text-first personal blog at [itsodeleo.github.io](https://itsodeleo.github.io)
 - Complete English/Chinese static pages with paired translation links
 - Local search at `/search/`
 - Archive index plus year and month archive pages
-- Atom and RSS feeds at `/atom.xml` and `/rss2.xml`
+- English Atom/RSS feeds at `/atom.xml` and `/rss2.xml`, and Chinese feeds under `/zh/`
 - GitHub Pages deployment through GitHub Actions
 - Per-page SEO metadata, canonical URLs, bilingual alternates, and article/author structured data
 - Automatic XML sitemap and crawl rules, with SEO checks before deployment
@@ -125,6 +125,10 @@ The site also exposes subscription feeds automatically:
 
 - `https://itsodeleo.github.io/atom.xml`
 - `https://itsodeleo.github.io/rss2.xml`
+- `https://itsodeleo.github.io/zh/atom.xml`
+- `https://itsodeleo.github.io/zh/rss2.xml`
+
+Navigation and feed discovery use the page's language. Feed timestamps come from the latest included article publication or meaningful update, not the build clock. Feeds exclude unpublished, future (unless explicitly enabled), and noindex posts; existing English subscriber URLs stay stable.
 
 ### Add a new post
 
@@ -251,7 +255,7 @@ Edit `description`, `seo.home_title`, `seo.home_title_zh`, and `seo.home_descrip
 
 ### Search engine verification and submission
 
-Google Search Console ownership uses the public HTML meta-tag token in `seo.google_site_verification`. Keep this token deployed after verification so ownership can be rechecked. Verification and sitemap processing status are shown in Search Console; deploying the token alone does not establish indexing. To set up or restore verification:
+Google Search Console and Bing Webmaster Tools ownership use the public HTML meta-tag tokens in `seo.google_site_verification` and `seo.bing_site_verification`. Keep these tokens deployed after verification so ownership can be rechecked. Verification and sitemap processing status are shown in each service; deploying a token alone does not establish indexing. To set up or restore verification:
 
 1. Add `https://itsodeleo.github.io/` as a URL-prefix property in [Google Search Console](https://search.google.com/search-console/).
 2. Copy the HTML meta-tag verification token into `seo.google_site_verification` in `_config.yml`, deploy, then complete verification in Search Console. For Bing, use `seo.bing_site_verification` from [Bing Webmaster Tools](https://www.bing.com/webmasters/).
@@ -267,7 +271,21 @@ npm run check
 
 This performs a clean production build and runs generated-page SEO checks plus language-switching regression tests. `npm test` can be used after an existing build. GitHub Actions runs the tests before uploading the deployment artifact.
 
-The checks cover canonical URLs, unique titles, descriptions, headings, JSON-LD and dates, visible breadcrumbs, reciprocal language alternates, sitemap coverage, crawl rules, asset/fragment links, image alternatives, and HTML-only reachability from the homepage. Language tests also cover unequal language counts, pagination, absent translations, and legacy query links.
+The checks cover canonical URLs, unique titles, descriptions, headings, JSON-LD and dates, visible breadcrumbs, reciprocal language alternates, sitemap coverage, crawl rules, asset/fragment links, image alternatives, and HTML-only reachability from the homepage. Language tests also cover unequal language counts, pagination, absent translations, and legacy query links. Feed tests verify valid XML, language membership, stable dates and publication exclusions. IndexNow tests cover meaningful content changes, deletions, no-op deployments, failed baseline fetches, and rejected submissions.
+
+### Automatic change notifications
+
+The Pages workflow prepares IndexNow notifications before deployment and sends them only after the deployment succeeds. `tools/indexnow.js` compares canonical, indexable HTML against the previous live content manifest. On first setup, it compares the actual pages in the live sitemap. New, materially edited, deleted, and newly noindex pages are included; unchanged deployments send nothing. Footer years and presentation-only class changes do not trigger notifications.
+
+The deployed `indexnow-manifest.json` contains only public canonical URLs and content fingerprints. The random public verification file corresponds to `indexnow.key` in `_config.yml`. Keep the file deployed; this key proves control of the public host and grants no repository or account access. Requests go only to the official IndexNow endpoint. This does not submit URLs to Google or replace Search Console.
+
+The notification job confirms the expected manifest and key are live before sending the retained payload. HTTP 200 means received; HTTP 202 means key validation is pending. Neither means indexed. A failure is shown in the workflow summary and does not undo a successful Pages deployment. The exact `indexnow-submission` artifact is retained for 30 days. Download that artifact and retry it with:
+
+```bash
+node tools/indexnow.js submit /path/to/downloaded-artifact
+```
+
+Retry while its deployment is still current: later changes can supersede its manifest. There is no background retry queue. Failed baseline retrieval stops the build rather than producing a blanket notification; retry the workflow after the live site is reachable. Deployments run serially so each one compares against the preceding deployment. Protocol reference: [IndexNow documentation](https://www.indexnow.org/documentation).
 
 ### Measuring progress
 
@@ -283,7 +301,7 @@ The same public HTML serves readers and crawlers. Article pages display their au
 
 The existing wildcard `Allow: /` rule permits search crawlers including Googlebot, Bingbot, and OAI-SearchBot. No special crawler groups are needed to repeat that permission. Search discovery and model training are separate controls: OpenAI documents OAI-SearchBot for search and GPTBot for potential training. This implementation does not change the existing training-crawler policy.
 
-In Search Console, check **Settings → Search generative AI** for the effective inclusion control. Inclusion is only eligibility; indexed pages and snippets are still required. Use Google's Generative AI performance report when sufficient data makes it available. Bing Webmaster Tools and its AI Performance report are a separate setup; the empty Bing verification field does not mean that setup has been completed.
+In Search Console, check **Settings → Search generative AI** for the effective inclusion control. Inclusion is only eligibility; indexed pages and snippets are still required. Use Google's Generative AI performance report when sufficient data makes it available. Bing Webmaster Tools and its AI Performance report are a separate service; use its verified-property dashboard for indexing and citation status.
 
 Next work should prioritize original essays, clear reasoning, authentic sources when a claim depends on outside evidence, and relevant links between essays. Preserve the distinction between personal speculation and established findings. Do not add invented citations, FAQ content, or claims of expertise. Google does not require an `llms.txt` file or special AI schema.
 

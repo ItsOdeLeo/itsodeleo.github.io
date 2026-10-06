@@ -104,4 +104,8 @@ seo:
   home_description_zh: Li Zeng 的个人博客，以中文记录对智能、模拟与现实的思考。
   author_path: about/
   google_site_verification: v3Pvq5EAUCmjh3_5n4AHqaQPLwl9DPb9dfB8U2hspqM
-  bing_site_verification:
+  bing_site_verification: 2377A1BB4C6A3D97E66C36B96603E75E
+
+# Public ownership proof for automatic notifications to participating search engines.
+indexnow:
+  key: 120d95581f685d5bf4f1b89026fd6a8fe3cd601428b7eb76bbb8d3169563980f

@@ -11,7 +11,7 @@ const languageOptions = [
     <div class="site-brand">
       <a class="site-title" href="<%= url_for(localizedPath('home')) %>"><%= config.title %></a>
       <div class="social-links">
-        <a href="<%= url_for('/atom.xml') %>">RSS</a>
+        <a href="<%= url_for(feedDetails().atomPath) %>">RSS</a>
       </div>
     </div>
     <div class="site-header-controls">
