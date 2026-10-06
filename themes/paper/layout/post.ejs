@@ -4,7 +4,11 @@
   <header class="post-detail-header">
     <h1 class="page-title"><%= page.title %></h1>
     <p class="post-meta">
+      <a rel="author" href="<%= url_for(postLanguage === 'zh' ? '/about/zh/' : '/about/') %>"><%= config.author %></a>
       <time datetime="<%= full_date(page.date, 'YYYY-MM-DD') %>"><%= date(page.date, 'MMMM D, YYYY') %></time>
+      <% if (page.updated && page.updated.valueOf() > page.date.valueOf()) { %>
+      <span><%= postLanguage === 'zh' ? '更新于' : 'Updated' %> <time datetime="<%= full_date(page.updated, 'YYYY-MM-DD') %>"><%= date(page.updated, 'MMMM D, YYYY') %></time></span>
+      <% } %>
     </p>
     <div class="post-language-row">
       <span class="language-chip"><%= langLabel(postLanguage) %></span>

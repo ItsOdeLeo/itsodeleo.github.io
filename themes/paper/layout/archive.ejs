@@ -8,7 +8,7 @@
 <% if (!page.year && !page.month) { %>
   <% let activeYear = ''; %>
   <% let activeMonth = ''; %>
-  <% site.posts.sort('date', -1).each(function(post) { %>
+  <% page.posts.sort('date', -1).each(function(post) { %>
     <% const year = date(post.date, 'YYYY'); %>
     <% const month = date(post.date, 'MMMM'); %>
     <% const monthNumber = date(post.date, 'MM'); %>
@@ -47,7 +47,7 @@
       </div>
     </li>
   <% }) %>
-  <% if (site.posts.length) { %>
+  <% if (page.posts.length) { %>
         </ul>
       </section>
     </div>
@@ -76,5 +76,8 @@
       <% }) %>
     </ul>
   </section>
-  <p class="empty-state language-empty-state" data-language-empty hidden data-i18n="filter.empty">No posts available in this language yet.</p>
+<p class="empty-state language-empty-state" data-language-empty hidden data-i18n="filter.empty">No posts available in this language yet.</p>
+<% } %>
+<% if (page.total > 1) { %>
+<nav class="pagination" aria-label="Pagination"><%- paginator() %></nav>
 <% } %>

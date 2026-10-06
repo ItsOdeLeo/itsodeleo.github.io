@@ -44,8 +44,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   const getLanguage = () => {
-    const saved = window.localStorage.getItem(storageKey);
-    return saved === "zh" || saved === "en" ? saved : document.documentElement.dataset.preferredLanguage || "en";
+    const current = document.documentElement.dataset.preferredLanguage;
+    if (current === "zh" || current === "en") {
+      return current;
+    }
+    try {
+      const saved = window.localStorage.getItem(storageKey);
+      return saved === "zh" || saved === "en" ? saved : "en";
+    } catch (error) {
+      return "en";
+    }
   };
 
   const emptyMessages = {

@@ -1,13 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
   const storageKey = "preferred-language";
   const defaultLang = document.body.dataset.defaultLanguage || "en";
+  const contentLanguage = document.body.dataset.contentLanguage || "";
+  const contentUiLanguage = contentLanguage.toLowerCase().startsWith("zh") ? "zh" : "en";
   const labels = {
     en: {
       "nav.home": "Home",
       "nav.posts": "Posts",
       "nav.archive": "Archive",
       "nav.search": "Search",
+      "nav.about": "About",
+      "home.title": "Latest essays",
+      "home.description": "Personal essays on intelligence, simulation, and how we understand reality.",
       "home.empty": "No posts yet. Add a Markdown file in source/_posts to get started.",
+      "posts.title": "All posts",
+      "posts.description": "Essays in English and Chinese.",
       "posts.empty": "No posts yet.",
       "archive.title": "Archive",
       "archive.description": "Browse posts by year and month.",
@@ -28,7 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
       "nav.posts": "文章",
       "nav.archive": "归档",
       "nav.search": "搜索",
+      "nav.about": "关于",
+      "home.title": "最新文章",
+      "home.description": "关于智能、模拟与我们如何理解现实的个人思考。",
       "home.empty": "还没有文章。先在 source/_posts 里添加一个 Markdown 文件。",
+      "posts.title": "全部文章",
+      "posts.description": "中英文文章。",
       "posts.empty": "还没有文章。",
       "archive.title": "归档",
       "archive.description": "按年份和月份浏览文章。",
@@ -47,8 +59,20 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const getStoredLanguage = () => {
-    const saved = window.localStorage.getItem(storageKey);
-    return saved === "zh" || saved === "en" ? saved : defaultLang;
+    try {
+      const saved = window.localStorage.getItem(storageKey);
+      return saved === "zh" || saved === "en" ? saved : defaultLang;
+    } catch (error) {
+      return defaultLang;
+    }
+  };
+
+  const storeLanguage = (lang) => {
+    try {
+      window.localStorage.setItem(storageKey, lang);
+    } catch (error) {
+      // Language switching still works when browser storage is unavailable.
+    }
   };
 
   const getQueryLanguage = () => {
@@ -74,6 +98,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll("[data-placeholder-en][data-placeholder-zh]").forEach((element) => {
       element.setAttribute("placeholder", lang === "zh" ? element.dataset.placeholderZh : element.dataset.placeholderEn);
+    });
+
+    document.querySelectorAll("[data-language-url-en][data-language-url-zh]").forEach((element) => {
+      element.setAttribute("href", lang === "zh" ? element.dataset.languageUrlZh : element.dataset.languageUrlEn);
     });
   };
 
@@ -101,25 +129,46 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("[data-language-switch]").forEach((button) => {
       const active = button.dataset.languageSwitch === lang;
       button.classList.toggle("active", active);
-      button.setAttribute("aria-pressed", active ? "true" : "false");
+      if (button.tagName === "A") {
+        if (active) {
+          button.setAttribute("aria-current", "page");
+        } else {
+          button.removeAttribute("aria-current");
+        }
+      } else {
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      }
     });
   };
 
-  const applyLanguage = (lang) => {
-    document.documentElement.lang = lang;
+  const applyLanguage = (language, updatePreference = false) => {
+    const lang = contentLanguage ? contentUiLanguage : language;
+    document.documentElement.lang = contentLanguage || lang;
     document.documentElement.dataset.preferredLanguage = lang;
-    window.localStorage.setItem(storageKey, lang);
-    setQueryLanguage(lang);
+    if (updatePreference) {
+      storeLanguage(lang);
+      setQueryLanguage(lang);
+    }
     updateButtons(lang);
     applyTranslations(lang);
     applyLanguageFilter(lang);
     window.dispatchEvent(new CustomEvent("languagechange", { detail: { lang } }));
   };
 
-  const initialLanguage = getQueryLanguage() || getStoredLanguage();
+  const initialLanguage = contentLanguage ? contentUiLanguage : (getQueryLanguage() || getStoredLanguage());
 
   document.querySelectorAll("[data-language-switch]").forEach((button) => {
-    button.addEventListener("click", () => applyLanguage(button.dataset.languageSwitch));
+    button.addEventListener("click", () => {
+      const lang = button.dataset.languageSwitch;
+      if (contentLanguage) {
+        // Real translation links retain native navigation, including new-tab clicks.
+        if (button.tagName === "A" && button.getAttribute("href")) {
+          storeLanguage(lang);
+        }
+        return;
+      }
+      applyLanguage(lang, true);
+    });
   });
 
   applyLanguage(initialLanguage);

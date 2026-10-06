@@ -1,6 +1,6 @@
 title: Li Zeng
 subtitle:
-description: A calm, text-first personal blog built with Hexo.
+description: Personal essays by Li Zeng on intelligence, simulation, and how we understand reality, in English and Chinese.
 keywords:
   - personal blog
   - writing
@@ -26,6 +26,7 @@ archive_dir: archives
 code_dir: downloads/code
 i18n_dir: :lang
 new_post_name: :slug.md
+updated_option: date
 default_layout: post
 titlecase: false
 external_link:
@@ -93,3 +94,12 @@ feed:
   canonical_lang: en
 
 social:
+  github:
+    label: GitHub
+    url: https://github.com/ItsOdeLeo
+
+seo:
+  home_title: Essays on intelligence and reality
+  author_path: about/
+  google_site_verification:
+  bing_site_verification:

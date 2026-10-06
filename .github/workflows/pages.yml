@@ -37,6 +37,9 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Verify SEO and language behavior
+        run: npm test
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

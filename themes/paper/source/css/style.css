@@ -168,6 +168,23 @@ button {
   text-underline-offset: 0.22em;
 }
 
+.language-switch-button {
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.language-switch-button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-family: var(--ui-font);
+}
+
 .language-switch-separator {
   color: rgba(31, 41, 51, 0.28);
 }

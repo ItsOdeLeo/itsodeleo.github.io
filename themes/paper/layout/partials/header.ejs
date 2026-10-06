@@ -1,3 +1,11 @@
+<%
+const contentLanguage = page.content_language || (is_post() ? (config.language || 'en') : '');
+const translations = contentLanguage ? seoTranslations() : [];
+const languageOptions = [
+  { lang: 'en', label: 'EN', ariaLabel: 'Read in English' },
+  { lang: 'zh', label: '中文', ariaLabel: '阅读中文版' }
+];
+%>
 <header class="site-header">
   <div class="site-header-top">
     <div class="site-brand">
@@ -13,12 +21,24 @@
         <a href="<%= url_for('/blog/') %>" data-i18n="nav.posts">Posts</a>
         <a href="<%= url_for('/archives/') %>" data-i18n="nav.archive">Archive</a>
         <a href="<%= url_for('/search/') %>" data-i18n="nav.search">Search</a>
+        <a href="<%= url_for(contentLanguage === 'zh' ? '/about/zh/' : '/about/') %>" data-i18n="nav.about" data-language-url-en="<%= url_for('/about/') %>" data-language-url-zh="<%= url_for('/about/zh/') %>">About</a>
       </nav>
 
       <div class="language-switch" aria-label="Language">
-        <button type="button" class="language-switch-button" data-language-switch="en" aria-label="Switch to English">EN</button>
-        <span class="language-switch-separator">/</span>
-        <button type="button" class="language-switch-button" data-language-switch="zh" aria-label="切换到中文">中文</button>
+        <% languageOptions.forEach(function(option, index) { %>
+          <% if (index) { %><span class="language-switch-separator" aria-hidden="true">/</span><% } %>
+          <% if (contentLanguage) { %>
+            <% const translation = translations.find((item) => item.lang === option.lang); %>
+            <% const targetUrl = translation ? translation.url : (contentLanguage === option.lang ? url_for(page.path || '/') : null); %>
+            <% if (targetUrl) { %>
+              <a class="language-switch-button<%= contentLanguage === option.lang ? ' active' : '' %>" data-language-switch="<%= option.lang %>" href="<%= targetUrl %>" hreflang="<%= option.lang %>" lang="<%= option.lang %>" aria-label="<%= option.ariaLabel %>"<% if (contentLanguage === option.lang) { %> aria-current="page"<% } %>><%= option.label %></a>
+            <% } else { %>
+              <button type="button" class="language-switch-button" data-language-switch="<%= option.lang %>" aria-label="<%= option.ariaLabel %>" disabled aria-disabled="true"><%= option.label %></button>
+            <% } %>
+          <% } else { %>
+            <button type="button" class="language-switch-button" data-language-switch="<%= option.lang %>" aria-label="<%= option.lang === 'zh' ? '切换到中文' : 'Switch to English' %>"><%= option.label %></button>
+          <% } %>
+        <% }); %>
       </div>
     </div>
   </div>

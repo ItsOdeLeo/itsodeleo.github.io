@@ -13,6 +13,8 @@ A text-first personal blog at [itsodeleo.github.io](https://itsodeleo.github.io)
 - Archive index plus year and month archive pages
 - Atom and RSS feeds at `/atom.xml` and `/rss2.xml`
 - GitHub Pages deployment through GitHub Actions
+- Per-page SEO metadata, canonical URLs, bilingual alternates, and article/author structured data
+- Automatic XML sitemap and crawl rules, with SEO checks before deployment
 
 ## Project Structure
 
@@ -22,12 +24,21 @@ A text-first personal blog at [itsodeleo.github.io](https://itsodeleo.github.io)
 ├── _config.yml
 ├── package.json
 ├── README.md
-├── scripts/site.js
+├── lib/seo.js
+├── scripts
+│   ├── site.js
+│   └── seo.js
+├── tests
+│   ├── language-switcher.test.js
+│   └── seo-output.test.js
 ├── scaffolds/post.md
 ├── source
 │   ├── _posts
 │   │   ├── when-reality-feels-structured.md
 │   │   └── when-reality-feels-structured_zh.md
+│   ├── about
+│   │   ├── index.md
+│   │   └── zh/index.md
 │   ├── blog/index.md
 │   └── search/index.md
 └── themes/paper
@@ -137,7 +148,7 @@ Intro paragraph.
 Rest of the post.
 ```
 
-The `slug` controls the final URL, so `slug: your-post-title` becomes `/posts/your-post-title/`.
+With the current Hexo configuration, the Markdown filename determines the post slug: `your-post-title.md` becomes `/posts/your-post-title/`. Keep published filenames stable to preserve existing links; a `slug` front-matter field does not override this filename behavior.
 
 ### Add Chinese and English versions of the same post
 
@@ -193,7 +204,7 @@ The recommended local folder is `itsodeleo.github.io`. Documentation links are r
 ### Normal publishing flow
 
 1. Edit content locally.
-2. Run `npm run build` to verify the site.
+2. Run `npm run check` to verify the site.
 3. Commit and push to `main`.
 4. GitHub Actions will build and deploy automatically.
 
@@ -204,3 +215,48 @@ The recommended local folder is `itsodeleo.github.io`. Documentation links are r
 - Add more static pages in [`source`](source)
 
 The project is intentionally small so it stays easy to maintain.
+
+## SEO
+
+SEO is generated at build time in `scripts/seo.js` and `lib/seo.js`; no browser JavaScript is needed to read article content or metadata.
+
+- Every page has a title, description, self-referencing canonical URL, Open Graph, and X card metadata. Canonicals omit `index.html`, query parameters, and fragments. Each translated article keeps its own canonical URL.
+- Paired articles and About pages declare reciprocal `en`/`zh` `hreflang` links using `translation_key`. The article language follows the content; header language links open the actual translation. List pages retain their interface language switch without adding query parameters on the first visit.
+- JSON-LD identifies the website and author, and describes each article as a `BlogPosting`. Author information is visible on `/about/` and `/about/zh/`, and linked from article bylines.
+- `/sitemap.xml` is generated from the actual HTML routes. It includes both article languages and excludes `noindex` pages and 404 pages. `/robots.txt` allows crawling and advertises the sitemap.
+- Search has `noindex, follow`; it stays crawlable so search engines can read that instruction. Set `indexing: false` in another page's front matter to exclude it from search results and the sitemap.
+
+### Writing article metadata
+
+`description` takes precedence over `excerpt`, then article text supplies a fallback. The text is cleaned and shortened for metadata; no keyword tag stuffing is used. Write each summary in the article's language.
+
+```yaml
+description: A concise summary of this article's actual argument.
+updated: 2026-10-06 12:00:00
+image: /images/my-article.jpg
+image_alt: A description of what the image shows.
+```
+
+All these fields are optional. Set `updated` only after a meaningful content change, using the site's configured timezone. `updated_option: date` uses the publication date when `updated` is absent, so CI checkout times do not make old posts look newly updated. Static pages and archives omit sitemap `lastmod` rather than inventing update dates. Images must exist; if none is provided, no image URL is invented in sharing metadata or structured data.
+
+Edit `description` and `seo.home_title` in `_config.yml` for the site summary. Update the About pages and `social` links when your public profile changes.
+
+### Search engine verification and submission
+
+Technical SEO does not establish ownership in Search Console or guarantee indexing. The repository does not contain an active verification token. To finish account setup:
+
+1. Add `https://itsodeleo.github.io/` as a URL-prefix property in [Google Search Console](https://search.google.com/search-console/).
+2. Copy the HTML meta-tag verification token into `seo.google_site_verification` in `_config.yml`, deploy, then complete verification in Search Console. For Bing, use `seo.bing_site_verification` from [Bing Webmaster Tools](https://www.bing.com/webmasters/).
+3. Submit `https://itsodeleo.github.io/sitemap.xml`, then inspect the homepage and both article URLs to check indexing and the canonical URL selected by the search engine.
+
+Changing a GitHub username does not provide redirects from old `github.io` sites. This repository cannot create redirects on old domains you no longer control. Update public profile links to the current domain.
+
+### Validation
+
+```bash
+npm run check
+```
+
+This performs a clean production build and runs generated-page SEO checks plus language-switching regression tests. `npm test` can be used after an existing build. GitHub Actions runs the tests before uploading the deployment artifact.
+
+The checks cover canonical URLs, unique titles, descriptions, headings, JSON-LD and dates, reciprocal language alternates, sitemap coverage, crawl rules, and language behavior with unavailable browser storage.
