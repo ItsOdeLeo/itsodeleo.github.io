@@ -251,7 +251,7 @@ Edit `description`, `seo.home_title`, `seo.home_title_zh`, and `seo.home_descrip
 
 ### Search engine verification and submission
 
-Technical SEO does not establish ownership in Search Console or guarantee indexing. The repository does not contain an active verification token. To finish account setup:
+Google Search Console ownership uses the public HTML meta-tag token in `seo.google_site_verification`. Keep this token deployed after verification so ownership can be rechecked. Verification and sitemap processing status are shown in Search Console; deploying the token alone does not establish indexing. To set up or restore verification:
 
 1. Add `https://itsodeleo.github.io/` as a URL-prefix property in [Google Search Console](https://search.google.com/search-console/).
 2. Copy the HTML meta-tag verification token into `seo.google_site_verification` in `_config.yml`, deploy, then complete verification in Search Console. For Bing, use `seo.bing_site_verification` from [Bing Webmaster Tools](https://www.bing.com/webmasters/).
