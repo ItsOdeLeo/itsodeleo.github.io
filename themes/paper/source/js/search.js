@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const input = document.getElementById("search-input");
   const results = document.getElementById("search-results");
-  const storageKey = "preferred-language";
 
   if (!input || !results) {
     return;
@@ -44,16 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   const getLanguage = () => {
-    const current = document.documentElement.dataset.preferredLanguage;
-    if (current === "zh" || current === "en") {
-      return current;
-    }
-    try {
-      const saved = window.localStorage.getItem(storageKey);
-      return saved === "zh" || saved === "en" ? saved : "en";
-    } catch (error) {
-      return "en";
-    }
+    return document.documentElement.lang.toLowerCase().startsWith("zh") ? "zh" : "en";
   };
 
   const emptyMessages = {
@@ -147,7 +137,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       .slice(0, 20)
       .map((item) => ({
         ...item,
-        dateLabel: item.date ? new Date(item.date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : ""
+        dateLabel: item.date ? new Date(item.date).toLocaleDateString(lang === "zh" ? "zh-CN" : "en", { year: "numeric", month: "long", day: "numeric" }) : ""
       }));
 
     renderMatches(matches, query);

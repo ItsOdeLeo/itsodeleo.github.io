@@ -10,7 +10,7 @@ const language = postLang(post);
     </h2>
     <p class="post-meta">
       <span class="language-chip compact"><%= langLabel(language) %></span>
-      <time datetime="<%= full_date(post.date, 'YYYY-MM-DD') %>"><%= date(post.date, 'MMMM D, YYYY') %></time>
+      <time datetime="<%= full_date(post.date, 'YYYY-MM-DD') %>"><%= localizedDate(post.date) %></time>
     </p>
   </header>
   <p class="post-item-excerpt"><%= preview %></p>

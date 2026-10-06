@@ -3,6 +3,7 @@ title: "嵌套模拟与嵌套智能：一个悲观的思考"
 date: 2026-03-23 10:00:00
 slug: nested-simulation-and-nested-intelligence-zh
 excerpt: 当我们一边创造模拟，一边怀疑自己是否也身处模拟之中时，一个问题自然出现了。
+description: "从嵌套模拟与递归智能出发，思考智能能否创造出本质上高于自身的智能，以及这种可能性为何让人对奇点产生悲观的疑问。"
 lang: zh
 translation_key: nested-simulation-and-nested-intelligence
 ---

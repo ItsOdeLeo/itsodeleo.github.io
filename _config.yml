@@ -100,6 +100,8 @@ social:
 
 seo:
   home_title: Essays on intelligence and reality
+  home_title_zh: 关于智能与现实的思考
+  home_description_zh: Li Zeng 的个人博客，以中文记录对智能、模拟与现实的思考。
   author_path: about/
   google_site_verification:
   bing_site_verification:

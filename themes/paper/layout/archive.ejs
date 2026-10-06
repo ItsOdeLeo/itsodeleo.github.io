@@ -1,7 +1,7 @@
 <section class="section-header">
   <div>
-    <h1 data-i18n="archive.title">Archive</h1>
-    <p data-i18n="archive.description">Browse posts by year and month.</p>
+    <h1><%= page.title %></h1>
+    <p><%= page.description %></p>
   </div>
 </section>
 
@@ -10,7 +10,7 @@
   <% let activeMonth = ''; %>
   <% page.posts.sort('date', -1).each(function(post) { %>
     <% const year = date(post.date, 'YYYY'); %>
-    <% const month = date(post.date, 'MMMM'); %>
+    <% const month = localizedDate(post.date, 'month'); %>
     <% const monthNumber = date(post.date, 'MM'); %>
     <% if (year !== activeYear) { %>
       <% if (activeMonth) { %>
@@ -21,7 +21,9 @@
       <% } %>
       <section class="archive-year-block">
         <h2 class="archive-year-heading">
-          <a href="<%= url_for('/archives/' + year + '/') %>"><%= year %></a>
+          <% if (config.archive_generator.yearly) { %>
+          <a href="<%= url_for(localizedPath('archive') + year + '/') %>"><%= year %></a>
+          <% } else { %><%= year %><% } %>
         </h2>
         <div class="archive-year-months" data-language-list>
       <% activeYear = year; %>
@@ -34,7 +36,9 @@
       <% } %>
       <section class="archive-month-block">
         <h3 class="archive-month-heading">
-          <a href="<%= url_for('/archives/' + year + '/' + monthNumber + '/') %>"><%= month %></a>
+          <% if (config.archive_generator.monthly) { %>
+          <a href="<%= url_for(localizedPath('archive') + year + '/' + monthNumber + '/') %>"><%= month %></a>
+          <% } else { %><%= month %><% } %>
         </h3>
         <ul class="archive-posts">
       <% activeMonth = month; %>
@@ -43,7 +47,7 @@
       <a class="archive-post-link" href="<%= url_for(post.path) %>"><%= post.title %></a>
       <div class="archive-post-meta">
         <span class="language-chip compact"><%= langLabel(postLang(post)) %></span>
-        <time class="archive-post-date" datetime="<%= full_date(post.date, 'YYYY-MM-DD') %>"><%= date(post.date, 'MMM D') %></time>
+        <time class="archive-post-date" datetime="<%= full_date(post.date, 'YYYY-MM-DD') %>"><%= localizedDate(post.date, 'short') %></time>
       </div>
     </li>
   <% }) %>
@@ -53,13 +57,13 @@
     </div>
   </section>
   <% } else { %>
-    <p class="empty-state" data-i18n="archive.empty">No posts yet.</p>
+    <p class="empty-state"><%= localText('empty') %></p>
   <% } %>
 <% } else { %>
   <section class="archive-filter">
     <p class="archive-filter-label">
       <% if (page.year && page.month) { %>
-        <%= date(page.posts.data[0] ? page.posts.data[0].date : page.date, 'MMMM YYYY') %>
+        <%= localizedDate(page.posts.data[0] ? page.posts.data[0].date : page.date, 'yearMonth') %>
       <% } else { %>
         <%= page.year %>
       <% } %>
@@ -70,14 +74,13 @@
           <a class="archive-post-link" href="<%= url_for(post.path) %>"><%= post.title %></a>
           <div class="archive-post-meta">
             <span class="language-chip compact"><%= langLabel(postLang(post)) %></span>
-            <time class="archive-post-date" datetime="<%= full_date(post.date, 'YYYY-MM-DD') %>"><%= date(post.date, 'MMM D, YYYY') %></time>
+            <time class="archive-post-date" datetime="<%= full_date(post.date, 'YYYY-MM-DD') %>"><%= localizedDate(post.date) %></time>
           </div>
         </li>
       <% }) %>
     </ul>
   </section>
-<p class="empty-state language-empty-state" data-language-empty hidden data-i18n="filter.empty">No posts available in this language yet.</p>
 <% } %>
 <% if (page.total > 1) { %>
-<nav class="pagination" aria-label="Pagination"><%- paginator() %></nav>
+<nav class="pagination" aria-label="<%= localText('pagination.label') %>"><%- paginator({ prev_text: localText('pagination.prev'), next_text: localText('pagination.next') }) %></nav>
 <% } %>

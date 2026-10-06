@@ -1,0 +1,9 @@
+<% const trail = seoBreadcrumbs(); if (trail.length) { %>
+<nav class="breadcrumbs" aria-label="<%= page.lang === 'zh' ? '当前位置' : 'Breadcrumb' %>">
+  <ol>
+    <% trail.forEach(function(item, index) { %>
+    <li><% if (index === trail.length - 1) { %><span aria-current="page"><%= item.name %></span><% } else { %><a href="<%= url_for(item.path) %>"><%= item.name %></a><% } %></li>
+    <% }); %>
+  </ol>
+</nav>
+<% } %>

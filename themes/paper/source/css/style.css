@@ -185,6 +185,26 @@ button {
   font-family: var(--ui-font);
 }
 
+.breadcrumbs {
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+  font: 0.85rem/1.6 var(--ui-font);
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.breadcrumbs li + li::before {
+  content: "/";
+  margin-right: 0.5rem;
+}
+
 .language-switch-separator {
   color: rgba(31, 41, 51, 0.28);
 }

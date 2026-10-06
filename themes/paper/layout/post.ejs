@@ -5,16 +5,16 @@
     <h1 class="page-title"><%= page.title %></h1>
     <p class="post-meta">
       <a rel="author" href="<%= url_for(postLanguage === 'zh' ? '/about/zh/' : '/about/') %>"><%= config.author %></a>
-      <time datetime="<%= full_date(page.date, 'YYYY-MM-DD') %>"><%= date(page.date, 'MMMM D, YYYY') %></time>
+      <time datetime="<%= full_date(page.date, 'YYYY-MM-DD') %>"><%= localizedDate(page.date) %></time>
       <% if (page.updated && page.updated.valueOf() > page.date.valueOf()) { %>
-      <span><%= postLanguage === 'zh' ? '更新于' : 'Updated' %> <time datetime="<%= full_date(page.updated, 'YYYY-MM-DD') %>"><%= date(page.updated, 'MMMM D, YYYY') %></time></span>
+      <span><%= postLanguage === 'zh' ? '更新于' : 'Updated' %> <time datetime="<%= full_date(page.updated, 'YYYY-MM-DD') %>"><%= localizedDate(page.updated) %></time></span>
       <% } %>
     </p>
     <div class="post-language-row">
       <span class="language-chip"><%= langLabel(postLanguage) %></span>
       <% if (translation) { %>
         <a class="translation-link" href="<%= url_for(translation.path) %>">
-          <span data-i18n="post.translation">Read this post in</span> <%= langLabel(postLang(translation)) %>
+          <span><%= localText('post.translation') %></span> <%= langLabel(postLang(translation)) %>
         </a>
       <% } %>
     </div>
@@ -25,7 +25,7 @@
   </div>
 
   <footer class="post-detail-footer">
-    <a href="<%= url_for('/blog/') %>" data-i18n="post.allPosts">All posts</a>
-    <a href="<%= url_for('/archives/') %>" data-i18n="post.archive">Archive</a>
+    <a href="<%= url_for(localizedPath('posts')) %>"><%= localText('post.allPosts') %></a>
+    <a href="<%= url_for(localizedPath('archive')) %>"><%= localText('post.archive') %></a>
   </footer>
 </article>

@@ -257,12 +257,37 @@ test("search is noindex,follow while ordinary pages remain indexable", () => {
     const directives = meta(page, "robots").toLowerCase().split(/\s*,\s*/);
     assert.ok(directives.includes("follow"), `${page.route}: links can be followed`);
     assert.ok(!directives.includes("nofollow"), `${page.route}: does not block following links`);
-    if (page.route === "/search/") {
-      assert.ok(directives.includes("noindex"), "Search results are not indexed");
-      assert.ok(!directives.includes("index"), "Search has no conflicting index directive");
+    const authored = sources.find(source => text(source.title) === text(page.document.querySelector('h1')?.textContent) && (source.lang || config.language) === page.document.documentElement.lang);
+    const excluded = /\/(?:search\/|404\.html)$/.test(page.route) || authored?.indexing === false;
+    if (excluded) {
+      assert.ok(directives.includes("noindex"), `${page.route}: utility pages are not indexed`);
+      assert.ok(!directives.includes("index"), `${page.route}: no conflicting index directive`);
     } else {
       assert.ok(directives.includes("index"), `${page.route}: indexable`);
       assert.ok(!directives.includes("noindex"), `${page.route}: no accidental noindex`);
+    }
+  }
+});
+
+test("visible breadcrumbs match structured navigation and author profiles identify their main person", () => {
+  for (const page of pages) {
+    const nodes = structuredNodes(page);
+    const trail = nodes.find(node => hasType(node, "BreadcrumbList"));
+    const visible = [...page.document.querySelectorAll('.breadcrumbs li')];
+    if (visible.length) {
+      assert.ok(trail, `${page.route}: visible navigation has matching schema`);
+      assert.deepEqual(trail.itemListElement.map(item => item.name), visible.map(item => text(item.textContent)));
+      trail.itemListElement.forEach((item, index) => {
+        assert.equal(item.position, index + 1);
+        assert.ok(pageByUrl.has(item.item), `${page.route}: breadcrumb target is generated`);
+        const link = visible[index].querySelector('a');
+        if (link) assert.equal(link.href, item.item);
+      });
+    } else assert.ok(!trail, `${page.route}: no invisible breadcrumb schema`);
+    if (/\/about\/(?:zh\/)?$/.test(page.route)) {
+      const profile = nodes.find(node => hasType(node, "ProfilePage"));
+      assert.ok(profile, `${page.route}: the author page is a profile`);
+      assert.ok(nodes.some(node => hasType(node, "Person") && node['@id'] === profile.mainEntity['@id']));
     }
   }
 });

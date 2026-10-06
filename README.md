@@ -8,7 +8,7 @@ A text-first personal blog at [itsodeleo.github.io](https://itsodeleo.github.io)
 - Home page with title, bio, and latest posts
 - Dedicated all-posts page at `/blog/`
 - Post detail pages generated from Markdown
-- English/Chinese language switching with paired translation links
+- Complete English/Chinese static pages with paired translation links
 - Local search at `/search/`
 - Archive index plus year and month archive pages
 - Atom and RSS feeds at `/atom.xml` and `/rss2.xml`
@@ -24,12 +24,16 @@ A text-first personal blog at [itsodeleo.github.io](https://itsodeleo.github.io)
 ├── _config.yml
 ├── package.json
 ├── README.md
-├── lib/seo.js
+├── lib
+│   ├── localization.js
+│   └── seo.js
 ├── scripts
 │   ├── site.js
+│   ├── localization.js
 │   └── seo.js
 ├── tests
 │   ├── language-switcher.test.js
+│   ├── crawl.test.js
 │   └── seo-output.test.js
 ├── scaffolds/post.md
 ├── source
@@ -39,8 +43,9 @@ A text-first personal blog at [itsodeleo.github.io](https://itsodeleo.github.io)
 │   ├── about
 │   │   ├── index.md
 │   │   └── zh/index.md
-│   ├── blog/index.md
-│   └── search/index.md
+│   ├── 404.md
+│   ├── favicon.png
+│   └── favicon.svg
 └── themes/paper
     ├── layout
     │   ├── archive.ejs
@@ -180,7 +185,8 @@ Rules:
 
 - Use `lang: en` for English and `lang: zh` for Chinese
 - Two versions of the same article should share the same `translation_key`
-- The language switch filters the home page, post list, archive, and search results
+- English collection pages live at `/`, `/blog/`, and `/archives/`; Chinese equivalents live under `/zh/`. Search also has a localized `/zh/search/` page.
+- Language links navigate real static pages; language filtering happens before pagination at build time, so lists work without JavaScript.
 - A post page shows a direct link to the other language version when it exists
 
 ## GitHub Pages Deployment
@@ -221,10 +227,12 @@ The project is intentionally small so it stays easy to maintain.
 SEO is generated at build time in `scripts/seo.js` and `lib/seo.js`; no browser JavaScript is needed to read article content or metadata.
 
 - Every page has a title, description, self-referencing canonical URL, Open Graph, and X card metadata. Canonicals omit `index.html`, query parameters, and fragments. Each translated article keeps its own canonical URL.
-- Paired articles and About pages declare reciprocal `en`/`zh` `hreflang` links using `translation_key`. The article language follows the content; header language links open the actual translation. List pages retain their interface language switch without adding query parameters on the first visit.
-- JSON-LD identifies the website and author, and describes each article as a `BlogPosting`. Author information is visible on `/about/` and `/about/zh/`, and linked from article bylines.
+- Paired articles and About pages declare reciprocal `en`/`zh` `hreflang` links using `translation_key`. English/Chinese collection landing pages also declare alternates. Each language has its own canonical URL, title, description, navigation, and list content in the generated HTML.
+- Pagination is calculated separately for each language. Later slices use self-canonicals and crawlable previous/next links; they do not claim to be translations of potentially different article selections. Legacy explicit `?lang=zh` links navigate to the matching Chinese collection; storage and browser settings never override the language of a URL.
+- JSON-LD identifies the website and author, describes each article as a `BlogPosting`, and marks author pages as `ProfilePage`/`AboutPage`. Author information and public handles are visible on `/about/` and `/about/zh/`. Visible navigation trails match `BreadcrumbList` markup.
 - `/sitemap.xml` is generated from the actual HTML routes. It includes both article languages and excludes `noindex` pages and 404 pages. `/robots.txt` allows crawling and advertises the sitemap.
 - Search has `noindex, follow`; it stays crawlable so search engines can read that instruction. Set `indexing: false` in another page's front matter to exclude it from search results and the sitemap.
+- A custom `404.html` helps visitors recover while keeping the actual HTTP 404 status on GitHub Pages. Crawlable PNG/SVG favicons represent the same Li Zeng identity as the site; regenerate them with `python3 tools/generate-favicon.py`.
 
 ### Writing article metadata
 
@@ -239,7 +247,7 @@ image_alt: A description of what the image shows.
 
 All these fields are optional. Set `updated` only after a meaningful content change, using the site's configured timezone. `updated_option: date` uses the publication date when `updated` is absent, so CI checkout times do not make old posts look newly updated. Static pages and archives omit sitemap `lastmod` rather than inventing update dates. Images must exist; if none is provided, no image URL is invented in sharing metadata or structured data.
 
-Edit `description` and `seo.home_title` in `_config.yml` for the site summary. Update the About pages and `social` links when your public profile changes.
+Edit `description`, `seo.home_title`, `seo.home_title_zh`, and `seo.home_description_zh` in `_config.yml` for the site summaries. Collection labels are in `lib/localization.js`, and `scripts/localization.js` generates their routes; there are no separate Markdown sources for blog/search collections. Update the About pages, `seo.author_aliases`, and `social` links when your public profile changes.
 
 ### Search engine verification and submission
 
@@ -259,4 +267,12 @@ npm run check
 
 This performs a clean production build and runs generated-page SEO checks plus language-switching regression tests. `npm test` can be used after an existing build. GitHub Actions runs the tests before uploading the deployment artifact.
 
-The checks cover canonical URLs, unique titles, descriptions, headings, JSON-LD and dates, reciprocal language alternates, sitemap coverage, crawl rules, and language behavior with unavailable browser storage.
+The checks cover canonical URLs, unique titles, descriptions, headings, JSON-LD and dates, visible breadcrumbs, reciprocal language alternates, sitemap coverage, crawl rules, asset/fragment links, image alternatives, and HTML-only reachability from the homepage. Language tests also cover unequal language counts, pagination, absent translations, and legacy query links.
+
+### Measuring progress
+
+Use Search Console to check indexed URLs, Google-selected canonicals, search queries, impressions, and clicks. Recheck after publishing meaningful new essays or making structural changes; a Lighthouse score only checks a limited technical baseline and does not measure ranking or topical authority.
+
+This blog currently has one original essay in two languages. Improving search reach from here requires useful original writing for the intended audience, accurate descriptive summaries, and relevant links between related essays when those essays exist. Do not add empty topic pages, fabricated expertise, unsupported schema, or repetitive keyword text merely to increase an SEO score.
+
+Implementation references: [Google multilingual site guidance](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites), [Article structured data](https://developers.google.com/search/docs/appearance/structured-data/article), [Profile pages](https://developers.google.com/search/docs/appearance/structured-data/profile-page), and [favicons](https://developers.google.com/search/docs/appearance/favicon-in-search).

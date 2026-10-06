@@ -3,6 +3,7 @@ title: "Nested Simulation and Nested Intelligence: A Pessimistic Thought"
 date: 2026-03-23 10:00:00
 slug: nested-simulation-and-nested-intelligence
 excerpt: "As we create simulations while also wondering whether we ourselves live inside one, a deeper question naturally arises."
+description: "A personal essay on nested simulations, recursive intelligence, and whether an intelligence can create something fundamentally greater than itself."
 lang: en
 translation_key: nested-simulation-and-nested-intelligence
 ---

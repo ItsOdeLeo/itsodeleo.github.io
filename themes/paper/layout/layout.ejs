@@ -1,13 +1,14 @@
-<% const contentLanguage = page.content_language || (is_post() ? (config.language || 'en') : ''); -%>
+<% const contentLanguage = page.content_language || page.lang || config.language || 'en'; -%>
 <!DOCTYPE html>
 <html lang="<%= page.lang || config.language || 'en' %>">
   <head>
     <%- partial('partials/head') %>
   </head>
-  <body data-default-language="<%= (config.languages && config.languages.default) || 'en' %>" data-content-language="<%= contentLanguage %>">
+  <body data-content-language="<%= contentLanguage %>"<% if (page.localization) { %> data-localized-collection="true"<% } %>>
     <div class="site-shell">
       <%- partial('partials/header') %>
       <main class="site-main">
+        <%- partial('partials/breadcrumbs') %>
         <%- body %>
       </main>
       <%- partial('partials/footer') %>

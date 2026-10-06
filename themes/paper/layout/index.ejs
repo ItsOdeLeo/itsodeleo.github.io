@@ -1,19 +1,18 @@
 <section class="section-header">
   <div>
-    <h1 data-i18n="home.title">Latest essays</h1>
-    <p data-i18n="home.description">Personal essays on intelligence, simulation, and how we understand reality.</p>
+    <h1><%= localText('home.title') %></h1>
+    <p><%= page.description %></p>
   </div>
 </section>
 <section class="post-list" data-language-list>
-  <% if (site.posts.length) { %>
+  <% if (page.posts.length) { %>
     <% page.posts.sort('date', -1).each(function(post) { %>
       <%- partial('partials/post-item', { post: post }) %>
     <% }) %>
   <% } else { %>
-    <p class="empty-state" data-i18n="home.empty">No posts yet. Add a Markdown file in source/_posts to get started.</p>
+    <p class="empty-state"><%= localText('empty') %></p>
   <% } %>
 </section>
-<p class="empty-state language-empty-state" data-language-empty hidden data-i18n="filter.empty">No posts available in this language yet.</p>
 <% if (page.total > 1) { %>
-<nav class="pagination" aria-label="Pagination"><%- paginator() %></nav>
+<nav class="pagination" aria-label="<%= localText('pagination.label') %>"><%- paginator({ prev_text: localText('pagination.prev'), next_text: localText('pagination.next') }) %></nav>
 <% } %>

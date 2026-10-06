@@ -41,7 +41,8 @@
 <% } %>
 <script type="application/ld+json"><%- seoStructuredData(seo) %></script>
 <meta name="theme-color" content="#fcfbf8">
-<link rel="icon" href="data:,">
+<link rel="icon" type="image/png" sizes="192x192" href="<%= url_for('/favicon.png') %>">
+<link rel="icon" type="image/svg+xml" sizes="any" href="<%= url_for('/favicon.svg') %>">
 <link rel="alternate" type="application/atom+xml" title="<%= config.title %> Atom Feed" href="<%= url_for('/atom.xml') %>">
 <link rel="alternate" type="application/rss+xml" title="<%= config.title %> RSS Feed" href="<%= url_for('/rss2.xml') %>">
 <%- css('css/style.css') %>
