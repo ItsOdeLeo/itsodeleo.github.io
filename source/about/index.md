@@ -11,6 +11,6 @@ I'm Li Zeng. This is my personal blog, where I publish essays in English and Chi
 
 My writing here explores intelligence, simulation, and how we understand reality. These essays are personal reflections; hypotheses and opinions are presented as such.
 
-Find me as [ItsOdeLeo on GitHub](https://github.com/ItsOdeLeo), browse [all posts](/blog/), or subscribe through [RSS](/atom.xml).
+Find me on [LinkedIn](https://www.linkedin.com/in/lizengdl/), browse [all posts](/blog/), or subscribe through [RSS](/atom.xml).
 
 [中文介绍](/about/zh/)

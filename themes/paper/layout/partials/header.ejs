@@ -11,6 +11,9 @@ const languageOptions = [
     <div class="site-brand">
       <a class="site-title" href="<%= url_for(localizedPath('home')) %>"><%= config.title %></a>
       <div class="social-links">
+        <% if (config.social && config.social.linkedin && config.social.linkedin.url) { %>
+          <a href="<%= config.social.linkedin.url %>" target="_blank" rel="noopener noreferrer"><%= config.social.linkedin.label || 'LinkedIn' %></a>
+        <% } %>
         <a href="<%= url_for(feedDetails().atomPath) %>">RSS</a>
       </div>
     </div>

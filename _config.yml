@@ -94,9 +94,9 @@ feed:
   canonical_lang: en
 
 social:
-  github:
-    label: GitHub
-    url: https://github.com/ItsOdeLeo
+  linkedin:
+    label: LinkedIn
+    url: https://www.linkedin.com/in/lizengdl/
 
 seo:
   home_title: Essays on intelligence and reality
