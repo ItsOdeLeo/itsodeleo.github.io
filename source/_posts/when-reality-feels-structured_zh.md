@@ -1,9 +1,10 @@
 ---
 title: "嵌套模拟与嵌套智能：一个悲观的思考"
 date: 2026-03-23 10:00:00
+updated: 2026-10-08 14:54:00
 slug: nested-simulation-and-nested-intelligence-zh
-excerpt: 当我们一边创造模拟，一边怀疑自己是否也身处模拟之中时，一个问题自然出现了。
-description: "从嵌套模拟与递归智能出发，思考智能能否创造出本质上高于自身的智能，以及这种可能性为何让人对奇点产生悲观的疑问。"
+excerpt: "从嵌套模拟中的沉默出发，思考智能创造更高智能的可能：能力有上限，还是更高智能选择不回应？这是一种个人猜想。"
+description: "一篇关于嵌套模拟与递归智能的个人思辨：如果智能能创造出高于自身的智能，为何没有跨层级的回应？本文探讨能力限制与不干涉两种可能，不构成证明。"
 lang: zh
 translation_key: nested-simulation-and-nested-intelligence
 ---
