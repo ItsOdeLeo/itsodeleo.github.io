@@ -114,9 +114,9 @@ Also edit [`_config.yml`](_config.yml):
 
 ```yml
 social:
-  linkedin:
-    label: LinkedIn
-    url: https://www.linkedin.com/in/yourhandle/
+  x:
+    label: X
+    url: https://x.com/yourhandle/
 ```
 
 The site also exposes subscription feeds automatically:

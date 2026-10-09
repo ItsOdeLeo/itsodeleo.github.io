@@ -11,9 +11,9 @@ const languageOptions = [
     <div class="site-brand">
       <a class="site-title" href="<%= url_for(localizedPath('home')) %>"><%= config.title %></a>
       <div class="social-links">
-        <% if (config.social && config.social.linkedin && config.social.linkedin.url) { %>
-          <a class="social-link-icon" href="<%= config.social.linkedin.url %>" target="_blank" rel="noopener noreferrer" aria-label="<%= config.social.linkedin.label || 'LinkedIn' %>" title="<%= config.social.linkedin.label || 'LinkedIn' %>">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M4 2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm2 8v8h2.5v-8H6Zm1.25-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM11 10v8h2.5v-4.4c0-2.2 2.5-2.4 2.5 0V18h2.5v-5.1c0-3.8-3.6-3.7-5-1.8V10H11Z"/></svg>
+        <% if (config.social && config.social.x && config.social.x.url) { %>
+          <a class="social-link-icon" href="<%= config.social.x.url %>" target="_blank" rel="noopener noreferrer" aria-label="<%= config.social.x.label || 'X' %>" title="<%= config.social.x.label || 'X' %>">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
         <% } %>
         <a class="social-link-icon" href="<%= url_for(feedDetails().atomPath) %>" aria-label="RSS" title="RSS">

@@ -94,9 +94,9 @@ feed:
   canonical_lang: en
 
 social:
-  linkedin:
-    label: LinkedIn
-    url: https://www.linkedin.com/in/lizengdl/
+  x:
+    label: X
+    url: https://x.com/ItsOdeLeo
 
 seo:
   home_title: Essays on intelligence and reality

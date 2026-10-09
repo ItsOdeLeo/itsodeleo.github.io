@@ -189,7 +189,7 @@ test("all structured data parses and identifies the real site and author", () =>
   }
   for (const person of people) {
     assert.equal(person.name, config.author, "Author identity matches the configured real name");
-    assert.deepEqual(person.sameAs, ["https://www.linkedin.com/in/lizengdl/"], "Only the approved public profile is linked to the author");
+    assert.deepEqual(person.sameAs, ["https://x.com/ItsOdeLeo"], "Only the approved public profile is linked to the author");
     assert.equal(person.alternateName, undefined, "Do not infer social aliases for the author");
     if (person.url) assert.ok(pageByUrl.has(person.url), "Author URL points to a generated page");
   }
