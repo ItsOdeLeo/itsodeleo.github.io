@@ -295,7 +295,7 @@ Retry while its deployment is still current: later changes can supersede its man
 
 Use Search Console to check indexed URLs, Google-selected canonicals, search queries, impressions, and clicks. Recheck after publishing meaningful new essays or making structural changes; a Lighthouse score only checks a limited technical baseline and does not measure ranking or topical authority.
 
-The blog publishes personal essays and local AI experiments in English and Chinese. Improving search reach from here requires useful original writing for the intended audience, accurate descriptive summaries, and relevant links between related essays when those essays exist. Do not add empty topic pages, fabricated expertise, unsupported schema, or repetitive keyword text merely to increase an SEO score.
+The site is a personal writing archive. Improving search reach from here requires useful original writing for the intended audience, accurate descriptive summaries, and relevant links between related essays when those essays exist. Do not add empty topic pages, fabricated expertise, unsupported schema, or repetitive keyword text merely to increase an SEO score.
 
 Implementation references: [Google multilingual site guidance](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites), [Article structured data](https://developers.google.com/search/docs/appearance/structured-data/article), [Profile pages](https://developers.google.com/search/docs/appearance/structured-data/profile-page), and [favicons](https://developers.google.com/search/docs/appearance/favicon-in-search).
 

@@ -1,6 +1,6 @@
 title: 欧的Leo
 subtitle:
-description: Personal essays and local AI experiments by 欧的Leo on intelligence, simulation, and how we understand reality, in English and Chinese.
+description: A personal writing archive.
 keywords:
   - personal blog
   - writing
@@ -99,9 +99,9 @@ social:
     url: https://x.com/ItsOdeLeo
 
 seo:
-  home_title: Essays on intelligence and reality
-  home_title_zh: 关于智能与现实的思考
-  home_description_zh: 欧的Leo 的个人博客，以中文记录本地 AI 实验，以及对智能、模拟与现实的思考。
+  home_title: Personal writing archive
+  home_title_zh: 个人文章归档
+  home_description_zh: 个人文章归档。
   author_path: about/
   google_site_verification: v3Pvq5EAUCmjh3_5n4AHqaQPLwl9DPb9dfB8U2hspqM
   bing_site_verification: 2377A1BB4C6A3D97E66C36B96603E75E
