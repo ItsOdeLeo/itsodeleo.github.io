@@ -49,7 +49,7 @@ def render():
         for points in LETTERS
     )
     svg = (
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="OderLeo">\n'
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="欧的Leo">\n'
         '  <rect width="192" height="192" fill="#fcfbf8"/>\n'
         '  <g fill="#1f2933">\n' + paths + '\n  </g>\n</svg>\n'
     )
