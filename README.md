@@ -1,4 +1,4 @@
-# Li Zeng’s Blog
+# OderLeo’s Blog
 
 A text-first personal blog at [itsodeleo.github.io](https://itsodeleo.github.io), published from [ItsOdeLeo/itsodeleo.github.io](https://github.com/ItsOdeLeo/itsodeleo.github.io). The project uses Hexo with a custom minimal theme, Markdown posts, a local JSON search index, and archive pages by year and month.
 
@@ -240,7 +240,7 @@ SEO is generated at build time in `scripts/seo.js` and `lib/seo.js`; no browser 
 - JSON-LD identifies the website and author, describes each article as a `BlogPosting`, and marks author pages as `ProfilePage`/`AboutPage`. Author information and public handles are visible on `/about/` and `/about/zh/`. Visible navigation trails match `BreadcrumbList` markup.
 - `/sitemap.xml` is generated from the actual HTML routes. It includes both article languages and excludes `noindex` pages and 404 pages. `/robots.txt` allows crawling and advertises the sitemap.
 - Search has `noindex, follow`; it stays crawlable so search engines can read that instruction. Set `indexing: false` in another page's front matter to exclude it from search results and the sitemap.
-- A custom `404.html` helps visitors recover while keeping the actual HTTP 404 status on GitHub Pages. Crawlable PNG/SVG favicons represent the same Li Zeng identity as the site; regenerate them with `python3 tools/generate-favicon.py`.
+- A custom `404.html` helps visitors recover while keeping the actual HTTP 404 status on GitHub Pages. Crawlable PNG/SVG favicons represent the same OderLeo identity as the site; regenerate them with `python3 tools/generate-favicon.py`.
 
 ### Writing article metadata
 

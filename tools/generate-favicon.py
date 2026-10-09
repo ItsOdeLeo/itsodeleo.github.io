@@ -1,4 +1,4 @@
-"""Render the blog's LZ favicon with only Python's standard library.
+"""Render the blog's OL favicon with only Python's standard library.
 
 Run: python3 tools/generate-favicon.py
 The same serif letter outlines generate the SVG and antialiased 192px PNG.
@@ -15,12 +15,15 @@ BACKGROUND = (252, 251, 248)
 INK = (31, 41, 51)
 # Small, deliberately simple slab-serifs remain readable in browser tabs.
 LETTERS = [
-    [(28, 47), (70, 47), (70, 55), (58, 57), (58, 135),
-     (78, 135), (88, 115), (95, 115), (91, 145), (28, 145),
-     (28, 137), (40, 135), (40, 57), (28, 55)],
-    [(104, 47), (167, 47), (167, 57), (123, 135), (146, 135),
-     (157, 115), (164, 115), (161, 145), (100, 145), (100, 135),
-     (145, 57), (123, 57), (114, 77), (107, 77)],
+    [(62, 45), (77, 49), (88, 60), (94, 77), (94, 115),
+     (88, 132), (77, 143), (62, 147), (47, 143), (36, 132),
+     (30, 115), (30, 77), (36, 60), (47, 49), (62, 45),
+     (62, 58), (53, 62), (48, 75), (48, 117), (53, 130),
+     (62, 134), (71, 130), (76, 117), (76, 75), (71, 62),
+     (62, 58), (62, 45)],
+    [(101, 47), (143, 47), (143, 55), (131, 57), (131, 135),
+     (151, 135), (161, 115), (168, 115), (164, 145), (101, 145),
+     (101, 137), (113, 135), (113, 57), (101, 55)],
 ]
 
 
@@ -46,7 +49,7 @@ def render():
         for points in LETTERS
     )
     svg = (
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="Li Zeng">\n'
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="OderLeo">\n'
         '  <rect width="192" height="192" fill="#fcfbf8"/>\n'
         '  <g fill="#1f2933">\n' + paths + '\n  </g>\n</svg>\n'
     )

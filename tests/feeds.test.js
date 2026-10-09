@@ -9,7 +9,7 @@ const { feedRoutes } = require("../lib/feeds");
 const atomNamespace = "http://www.w3.org/2005/Atom";
 const xmlNamespace = "http://www.w3.org/XML/1998/namespace";
 const fixtureConfig = {
-  url: "https://example.com", title: 'Li & "Leo"', author: "Li Zeng", language: "en",
+  url: "https://example.com", title: 'Li & "Leo"', author: "Example Author", language: "en",
   description: "English essays & notes", languages: { default: "en" }, feed: { limit: 20 },
   seo: { home_description_zh: "中文文章与思考。" }, future: false
 };
