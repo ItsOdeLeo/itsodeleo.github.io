@@ -1,0 +1,41 @@
+<% const share = articleShare(); %>
+<% const socialPlatforms = [
+  { name: 'x', url: share.xUrl, icon: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' },
+  { name: 'linkedin', url: share.linkedinUrl, icon: 'M4 2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm2 8v8h2.5v-8H6Zm1.25-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM11 10v8h2.5v-4.4c0-2.2 2.5-2.4 2.5 0V18h2.5v-5.1c0-3.8-3.6-3.7-5-1.8V10H11Z' }
+]; %>
+<div class="post-share" data-share data-share-url="<%= share.url %>" data-share-title="<%= share.title %>" data-share-preview="<%= share.preview %>"
+  data-copied="<%= localText('share.copied') %>" data-copy-fallback="<%= localText('share.copyFallback') %>" data-share-fallback="<%= localText('share.fallback') %>" data-preview-note="<%= localText('share.preview') %>" data-preview-feedback="<%= localText('share.previewFeedback') %>">
+  <div class="post-share-actions" role="group" aria-label="<%= localText('share.label') %>">
+    <span class="post-share-label"><%= localText('share.label') %></span>
+    <button class="share-action share-action-icon" type="button" data-share-copy hidden aria-label="<%= localText('share.copy') %>" title="<%= localText('share.copy') %>">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <rect x="9" y="9" width="11" height="11" rx="2"/>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+    </button>
+    <% socialPlatforms.forEach(function(platform) { const label = localText('share.' + platform.name); %>
+    <% if (platform.url) { %>
+    <a class="share-action share-action-icon" data-share-<%= platform.name %> href="<%= platform.url %>" target="_blank" rel="noopener noreferrer" aria-label="<%= label %>" title="<%= label %>">
+    <% } else { %>
+    <button class="share-action share-action-icon" type="button" data-share-<%= platform.name %> disabled aria-label="<%= label %>" title="<%= label %>">
+    <% } %>
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="<%= platform.icon %>"/></svg>
+    <% if (platform.url) { %></a>
+    <% } else { %>
+    </button>
+    <% } %>
+    <% }); %>
+    <button class="share-action share-action-icon" type="button" data-share-native hidden aria-label="<%= localText('share.native') %>" title="<%= localText('share.native') %>">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="M12 15V3m-4 4 4-4 4 4M6 11H4v10h16V11h-2"/>
+      </svg>
+    </button>
+    <noscript><a class="share-action" href="<%= share.preview ? url_for(page.path) : share.url %>"><%= localText('share.link') %></a></noscript>
+  </div>
+  <p class="post-share-note" data-share-note<% if (!share.preview) { %> hidden<% } %>><%= share.preview ? localText('share.preview') : '' %></p>
+  <p class="post-share-status" data-share-status role="status" aria-live="polite" aria-atomic="true"></p>
+  <label class="post-share-fallback" data-share-fallback hidden>
+    <span><%= localText('share.link') %></span>
+    <input type="url" data-share-input readonly>
+  </label>
+</div>

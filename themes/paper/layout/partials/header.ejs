@@ -12,9 +12,16 @@ const languageOptions = [
       <a class="site-title" href="<%= url_for(localizedPath('home')) %>"><%= config.title %></a>
       <div class="social-links">
         <% if (config.social && config.social.linkedin && config.social.linkedin.url) { %>
-          <a href="<%= config.social.linkedin.url %>" target="_blank" rel="noopener noreferrer"><%= config.social.linkedin.label || 'LinkedIn' %></a>
+          <a class="social-link-icon" href="<%= config.social.linkedin.url %>" target="_blank" rel="noopener noreferrer" aria-label="<%= config.social.linkedin.label || 'LinkedIn' %>" title="<%= config.social.linkedin.label || 'LinkedIn' %>">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M4 2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm2 8v8h2.5v-8H6Zm1.25-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM11 10v8h2.5v-4.4c0-2.2 2.5-2.4 2.5 0V18h2.5v-5.1c0-3.8-3.6-3.7-5-1.8V10H11Z"/></svg>
+          </a>
         <% } %>
-        <a href="<%= url_for(feedDetails().atomPath) %>">RSS</a>
+        <a class="social-link-icon" href="<%= url_for(feedDetails().atomPath) %>" aria-label="RSS" title="RSS">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <circle cx="5" cy="19" r="2" fill="currentColor" stroke="none"/>
+            <path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/>
+          </svg>
+        </a>
       </div>
     </div>
     <div class="site-header-controls">

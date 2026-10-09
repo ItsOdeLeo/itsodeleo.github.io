@@ -166,6 +166,17 @@ test("article descriptions use their own authored summaries and share metadata a
   }
 });
 
+test("production discovery contains only published articles, never preview drafts", () => {
+  const publishedUrls = new Set(posts.map(source => sourcePage(source).url));
+  const renderedArticles = pages.filter(page => page.document.querySelector('meta[property="og:type"]')?.content === "article");
+  assert.deepEqual(renderedArticles.map(page => canonical(page)).sort(), [...publishedUrls].sort(),
+    "Every generated article must come from an eligible _posts source; --draft output must not be deployed");
+  const searchEntries = JSON.parse(fs.readFileSync(path.join(output, "search.json"), "utf8"));
+  for (const entry of searchEntries) {
+    assert.ok(publishedUrls.has(new URL(entry.url, origin).href), `Search entry is a published article: ${entry.url}`);
+  }
+});
+
 test("all structured data parses and identifies the real site and author", () => {
   const nodes = pages.flatMap(structuredNodes);
   const websites = nodes.filter((node) => hasType(node, "WebSite"));
@@ -178,6 +189,8 @@ test("all structured data parses and identifies the real site and author", () =>
   }
   for (const person of people) {
     assert.equal(person.name, config.author, "Author identity matches the configured real name");
+    assert.deepEqual(person.sameAs, ["https://www.linkedin.com/in/lizengdl/"], "Only the approved public profile is linked to the author");
+    assert.equal(person.alternateName, undefined, "Do not infer social aliases for the author");
     if (person.url) assert.ok(pageByUrl.has(person.url), "Author URL points to a generated page");
   }
 });

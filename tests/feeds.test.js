@@ -112,6 +112,53 @@ test("feed units: full content survives XML-sensitive text and CDATA terminators
   assert.equal(feeds.get("rss2.xml").getElementsByTagNameNS("http://purl.org/rss/1.0/modules/content/", "encoded")[0].textContent, expected);
 });
 
+test("feed units: links and media remain portable outside the article without rewriting authored text", () => {
+  const untouched = '<p title="href=\'../not-a-link\' > quoted">中文 &amp; text.</p>' +
+    '<pre>&lt;a href="../example"&gt;Example&lt;/a&gt;</pre>' +
+    '<script>const example = \'<a href="../example">\';</script>' +
+    '<!-- <img src="../example"> -->' +
+    '<a id="mail" href="mailto:leo@example.com">Mail</a>' +
+    '<img id="data" src="data:image/svg+xml,%3Csvg%3E%3C/svg%3E">' +
+    '<a id="absolute" href="https://other.example/?a=1&amp;b=2">External</a>';
+  const content = '<a id="root" href="/about/?a=1&amp;b=2">Author</a>' +
+    '<a id="relative" HREF = \'../other/?q=a%20b\'>Other</a>' +
+    '<a id="fragment" href="#result">Result</a>' +
+    '<img id="local-image" src=./figure.png>' +
+    '<img id="cdn" src="//cdn.example.com/image.png">' +
+    '<video id="video" poster="/poster.jpg"></video>' + untouched;
+  const feeds = documents([post("posts/portable/", {
+    content, excerpt: '<p><a href="../related/?a=1&amp;b=2">Related</a></p>'
+  })]);
+  const atom = feeds.get("atom.xml");
+  const rss = feeds.get("rss2.xml");
+  const bodies = [atom.querySelector("entry > content").textContent,
+    rss.getElementsByTagNameNS("http://purl.org/rss/1.0/modules/content/", "encoded")[0].textContent];
+  const expected = {
+    root: ["href", "https://example.com/about/?a=1&b=2"],
+    relative: ["href", "https://example.com/posts/other/?q=a%20b"],
+    fragment: ["href", "https://example.com/posts/portable/#result"],
+    "local-image": ["src", "https://example.com/posts/portable/figure.png"],
+    cdn: ["src", "https://cdn.example.com/image.png"],
+    video: ["poster", "https://example.com/poster.jpg"],
+    mail: ["href", "mailto:leo@example.com"],
+    data: ["src", "data:image/svg+xml,%3Csvg%3E%3C/svg%3E"],
+    absolute: ["href", "https://other.example/?a=1&b=2"]
+  };
+  for (const body of bodies) {
+    assert.ok(body.endsWith(untouched), "Unrelated markup, examples, and absolute URLs retain their original bytes");
+    const document = new JSDOM(body, { url: "https://feed-reader.example/subscriptions/" }).window.document;
+    for (const [id, [attribute, value]] of Object.entries(expected)) {
+      assert.equal(document.getElementById(id).getAttribute(attribute), value);
+    }
+    assert.ok(!body.includes("&amp;amp;"), "Existing HTML entities are not double-escaped");
+  }
+  const summaries = [atom.querySelector("entry > summary").textContent, rss.querySelector("item > description").textContent];
+  for (const summary of summaries) {
+    assert.equal(new JSDOM(summary).window.document.querySelector("a").getAttribute("href"),
+      "https://example.com/posts/related/?a=1&b=2", "Summary links use the article URL too");
+  }
+});
+
 test("published feeds: discovery, membership and timestamps match the rendered article language", () => {
   // Integration coverage reads the actual site; run npm run build first.
   const root = path.resolve(__dirname, "..");

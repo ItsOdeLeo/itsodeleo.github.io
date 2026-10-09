@@ -14,6 +14,7 @@ A text-first personal blog at [itsodeleo.github.io](https://itsodeleo.github.io)
 - English Atom/RSS feeds at `/atom.xml` and `/rss2.xml`, and Chinese feeds under `/zh/`
 - GitHub Pages deployment through GitHub Actions
 - Per-page SEO metadata, canonical URLs, bilingual alternates, and article/author structured data
+- Bilingual article sharing: copy link, X and LinkedIn share links, and native sharing on supported devices
 - Automatic XML sitemap and crawl rules, with SEO checks before deployment
 
 ## Project Structure
@@ -113,9 +114,6 @@ Also edit [`_config.yml`](_config.yml):
 
 ```yml
 social:
-  x:
-    label: Twitter / X
-    url: https://x.com/yourhandle
   linkedin:
     label: LinkedIn
     url: https://www.linkedin.com/in/yourhandle/
@@ -128,7 +126,7 @@ The site also exposes subscription feeds automatically:
 - `https://itsodeleo.github.io/zh/atom.xml`
 - `https://itsodeleo.github.io/zh/rss2.xml`
 
-Navigation and feed discovery use the page's language. Feed timestamps come from the latest included article publication or meaningful update, not the build clock. Feeds exclude unpublished, future (unless explicitly enabled), and noindex posts; existing English subscriber URLs stay stable.
+Navigation and feed discovery use the page's language. Feed timestamps come from the latest included article publication or meaningful update, not the build clock. Feeds exclude unpublished, future (unless explicitly enabled), and noindex posts; existing English subscriber URLs stay stable. Relative links and media URLs in feed content and summaries resolve against the article's canonical address, so they also work outside the website.
 
 ### Add a new post
 
@@ -226,6 +224,12 @@ The recommended local folder is `itsodeleo.github.io`. Documentation links are r
 
 The project is intentionally small so it stays easy to maintain.
 
+### Article sharing
+
+Article headers and footers include a compact share row. Published pages share the current language's canonical address. X includes the article title in its compose link; LinkedIn receives only the URL and creates its preview from the page metadata. Both open a sharing screen for the reader to review and submit. Browsers supporting the [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share) can also open the device's share panel. Copying uses the [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText); when unavailable or denied, a selected, read-only link is shown for manual copying. No third-party sharing script is loaded.
+
+Draft and loopback previews prevent external sharing and only copy the clean local preview URL. Their X and LinkedIn icons explain the preview limitation when clicked or activated by keyboard; they never open an external sharing URL. Without JavaScript these preview buttons remain disabled and the visible note explains why. Production X and LinkedIn links remain usable without JavaScript, and the interactive controls are progressively enabled. Labels live in `lib/localization.js`; rendering and behavior are in `partials/share.ejs`, `lib/share.js`, and `themes/paper/source/js/share.js`.
+
 ## SEO
 
 SEO is generated at build time in `scripts/seo.js` and `lib/seo.js`; no browser JavaScript is needed to read article content or metadata.
@@ -271,7 +275,7 @@ npm run check
 
 This performs a clean production build and runs generated-page SEO checks plus language-switching regression tests. `npm test` can be used after an existing build. GitHub Actions runs the tests before uploading the deployment artifact.
 
-The checks cover canonical URLs, unique titles, descriptions, headings, JSON-LD and dates, visible breadcrumbs, reciprocal language alternates, sitemap coverage, crawl rules, asset/fragment links, image alternatives, and HTML-only reachability from the homepage. Language tests also cover unequal language counts, pagination, absent translations, and legacy query links. Feed tests verify valid XML, language membership, stable dates and publication exclusions. IndexNow tests cover meaningful content changes, deletions, no-op deployments, failed baseline fetches, and rejected submissions.
+The checks cover canonical URLs, unique titles, descriptions, headings, JSON-LD and dates, visible breadcrumbs, reciprocal language alternates, sitemap coverage, crawl rules, asset/fragment links, image alternatives, and HTML-only reachability from the homepage. Production article output and search entries must match eligible `_posts` sources; a build accidentally including preview drafts fails validation. Language tests also cover unequal language counts, pagination, absent translations, and legacy query links. Feed tests verify valid XML, portable links, language membership, stable dates and publication exclusions. Article HTML tests preserve authored text, section IDs and table values while validating accessible links and captions. IndexNow tests cover meaningful content changes, deletions, no-op deployments, failed baseline fetches, and rejected submissions.
 
 ### Automatic change notifications
 
@@ -291,18 +295,20 @@ Retry while its deployment is still current: later changes can supersede its man
 
 Use Search Console to check indexed URLs, Google-selected canonicals, search queries, impressions, and clicks. Recheck after publishing meaningful new essays or making structural changes; a Lighthouse score only checks a limited technical baseline and does not measure ranking or topical authority.
 
-This blog currently has one original essay in two languages. Improving search reach from here requires useful original writing for the intended audience, accurate descriptive summaries, and relevant links between related essays when those essays exist. Do not add empty topic pages, fabricated expertise, unsupported schema, or repetitive keyword text merely to increase an SEO score.
+The blog publishes personal essays and local AI experiments in English and Chinese. Improving search reach from here requires useful original writing for the intended audience, accurate descriptive summaries, and relevant links between related essays when those essays exist. Do not add empty topic pages, fabricated expertise, unsupported schema, or repetitive keyword text merely to increase an SEO score.
 
 Implementation references: [Google multilingual site guidance](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites), [Article structured data](https://developers.google.com/search/docs/appearance/structured-data/article), [Profile pages](https://developers.google.com/search/docs/appearance/structured-data/profile-page), and [favicons](https://developers.google.com/search/docs/appearance/favicon-in-search).
 
 ### AI search discovery (GEO)
 
-The same public HTML serves readers and crawlers. Article pages display their authored `description` as a short introduction, with no generated factual claims. Articles with at least three H2/H3 sections also display a static, localized table of contents linking to the existing heading IDs. Set `toc: false` in front matter to omit it. Summaries and section links improve readability and navigation; they are not a guarantee of AI citations.
+The same public HTML serves readers and crawlers. Article pages display their authored `description` as a short introduction, with no generated factual claims. Articles with at least three H2/H3 sections also display a static, localized table of contents linking to the existing heading IDs. Set `toc: false` in front matter to omit it. Heading permalinks let readers link to a specific passage. Tables inside a named `.table-scroll` region reuse its authored label as their caption and identify column headers. Summaries, section links, and table semantics improve reading and navigation; they are not a guarantee of AI citations.
 
 The existing wildcard `Allow: /` rule permits search crawlers including Googlebot, Bingbot, and OAI-SearchBot. No special crawler groups are needed to repeat that permission. Search discovery and model training are separate controls: OpenAI documents OAI-SearchBot for search and GPTBot for potential training. This implementation does not change the existing training-crawler policy.
 
-In Search Console, check **Settings → Search generative AI** for the effective inclusion control. Inclusion is only eligibility; indexed pages and snippets are still required. Use Google's Generative AI performance report when sufficient data makes it available. Bing Webmaster Tools and its AI Performance report are a separate service; use its verified-property dashboard for indexing and citation status.
+Use Search Console's URL Inspection to check indexing and snippet eligibility. Google also provides **Settings → Search generative AI**, including inherited controls: check the effective value is **Include** when AI-search visibility is intended. Its **Generative AI performance** report measures AI Overviews and AI Mode impressions; the report may be absent when there is insufficient data. These impressions also contribute to the ordinary Web performance data. Googlebot access, indexing, snippet eligibility, and the inclusion control are prerequisites, not a guarantee of display. See [Google's current AI optimization guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide).
+
+Bing Webmaster Tools is a separate service. Check URL Inspection and sitemap processing for discovery, then AI Performance for reported citations and cited pages. Distinguish an accepted sitemap or submission from an indexed page, and an indexed page from an actual AI impression or citation. When a sitemap reports a fetch error, verify its live HTTP response and XML before resubmitting the existing public URL. Do not submit local drafts or preview addresses.
 
 Next work should prioritize original essays, clear reasoning, authentic sources when a claim depends on outside evidence, and relevant links between essays. Preserve the distinction between personal speculation and established findings. Do not add invented citations, FAQ content, or claims of expertise. Google does not require an `llms.txt` file or special AI schema.
 
-References: [Google AI search guidance](https://developers.google.com/search/docs/appearance/ai-features), [Google's AI inclusion control](https://support.google.com/webmasters/answer/16908024), [Google's AI performance report](https://support.google.com/webmasters/answer/16984139), and [OpenAI crawler roles](https://developers.openai.com/api/docs/bots).
+References: [Google AI search guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), [Google's AI inclusion control](https://support.google.com/webmasters/answer/16908024), [Google's AI performance report](https://support.google.com/webmasters/answer/16984139), [Bing AI Performance](https://blogs.bing.com/webmaster/2026/2/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview/), and [OpenAI crawler roles](https://developers.openai.com/api/docs/bots).

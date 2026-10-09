@@ -14,5 +14,6 @@
       <%- partial('partials/footer') %>
     </div>
     <%- js('js/language-switcher.js') %>
+    <% if (is_post()) { %><script src="<%= url_for('js/share.js') %>" defer></script><% } %>
   </body>
 </html>

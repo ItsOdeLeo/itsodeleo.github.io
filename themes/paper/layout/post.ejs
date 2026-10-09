@@ -24,6 +24,7 @@
         </a>
       <% } %>
     </div>
+    <%- partial('partials/share') %>
   </header>
 
   <% if (showToc) { %>
@@ -37,6 +38,7 @@
     <%- page.content %>
   </div>
 
+  <%- partial('partials/share') %>
   <footer class="post-detail-footer">
     <a href="<%= url_for(localizedPath('posts')) %>"><%= localText('post.allPosts') %></a>
     <a href="<%= url_for(localizedPath('archive')) %>"><%= localText('post.archive') %></a>
